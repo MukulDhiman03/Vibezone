@@ -6,7 +6,6 @@ import {
   InputGroup,
   InputRightElement,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import {
@@ -17,8 +16,9 @@ import {
 import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import useLikePost from "../../hooks/useLikePost";
+import { timeAgo } from "../../utils/timeAgo";
 
-const PostFooter = ({ post, username, isProfile }) => {
+const PostFooter = ({ post, isProfile, creatorProfile }) => {
   const { isCommenting, handlePostComment } = usePostComment();
   const [comment, setComment] = useState("");
   const authUser = useAuthStore((state) => state.user);
@@ -45,20 +45,29 @@ const PostFooter = ({ post, username, isProfile }) => {
           <CommentLogo />
         </Box>
       </Flex>
+      {isProfile && (
+        <Text fontSize="12" color={"gray"}>
+          Posted {timeAgo(post.createdAt)}
+        </Text>
+      )}
       {!isProfile && (
         <>
-          <Text fontWeight={600} fontSize={"sm"}>
-            {likes} likes
-          </Text>
-          <Text fontSize="sm" fontWeight={400}>
-            {/* {userName} */}
+          <Text fontSize="sm" fontWeight={700}>
+            {creatorProfile?.username}{" "}
             <Text as="span" fontWeight={400}>
-              Feeling Good
-            </Text>
-            <Text fontSize="sm" color={"gray"}>
-              View all 1,000 comments
+              {post.caption}
             </Text>
           </Text>
+          {post.comments.length > 0 && (
+            <Text
+              fontSize="sm"
+              color={"gray"}
+              cursor={"pointer"}
+              onClick={onOpen}
+            >
+              View all {post.comments.length} comments
+            </Text>
+          )}
         </>
       )}
       {authUser && (

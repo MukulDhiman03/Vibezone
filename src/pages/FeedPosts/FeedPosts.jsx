@@ -8,16 +8,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import FeedPost from "./FeedPost";
-import { useEffect, useState } from "react";
+import useGetFeedPost from "../../hooks/useGetFeedPost";
 
 const FeedPosts = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, []);
-
+  const { isLoading, posts } = useGetFeedPost();
   return (
     <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&
@@ -35,28 +29,15 @@ const FeedPosts = () => {
             </Skeleton>
           </VStack>
         ))}
-      {!isLoading && (
+      {!isLoading &&
+        posts.length > 0 &&
+        posts.map((post) => <FeedPost key={post.id} post={post} />)}
+      {!isLoading && posts.length === 0 && (
         <>
-          <FeedPost
-            img="/images/img1.png"
-            userName="asaprogrammer"
-            avatar="/images/img1.png"
-          />
-          <FeedPost
-            img="/images/img2.png"
-            userName="burakorkmezz"
-            avatar="/images/img2.png"
-          />
-          <FeedPost
-            img="/images/img3.png"
-            userName="josh"
-            avatar="/images/img3.png"
-          />
-          <FeedPost
-            img="/images/img4.png"
-            userName="johndoe"
-            avatar="/images/img4.png"
-          />
+          <Text fontSize={"md"} color={"red.400"}>
+            Dayuum. Looks like you don&apos;t have any friends.
+          </Text>
+          <Text color={"red.400"}>Stop coding and go make some!!</Text>
         </>
       )}
     </Container>
