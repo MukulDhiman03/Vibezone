@@ -6,7 +6,9 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
+
 import React, { useRef, useState } from "react";
 import {
   CommentLogo,
@@ -17,11 +19,13 @@ import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import useLikePost from "../../hooks/useLikePost";
 import { timeAgo } from "../../utils/timeAgo";
+import CommentsModal from "../../components/Modals/CommentModals";
 
 const PostFooter = ({ post, isProfile, creatorProfile }) => {
   const { isCommenting, handlePostComment } = usePostComment();
   const [comment, setComment] = useState("");
   const authUser = useAuthStore((state) => state.user);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const commentRef = useRef(null);
 
@@ -68,6 +72,10 @@ const PostFooter = ({ post, isProfile, creatorProfile }) => {
               View all {post.comments.length} comments
             </Text>
           )}
+          {/* COMMENTS MODAL */}
+          {isOpen ? (
+            <CommentsModal isOpen={isOpen} onClose={onClose} post={post} />
+          ) : null}
         </>
       )}
       {authUser && (
