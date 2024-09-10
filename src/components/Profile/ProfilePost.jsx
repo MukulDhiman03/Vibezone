@@ -9,7 +9,6 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalHeader,
   ModalOverlay,
   Text,
   VStack,
@@ -28,6 +27,7 @@ import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import useShowToast from "../../hooks/useShowToast";
 import usePostStore from "../../store/postStore";
 import { useState } from "react";
+import Caption from "../Comments/Captions";
 
 const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -174,6 +174,9 @@ const ProfilePost = ({ post }) => {
                   maxH={"350px"}
                   overflowY={"auto"}
                 >
+                  {/* CAPTIONS */}
+                  {post.caption && <Caption post={post} />}
+                  {/* COMMENTS */}
                   {post.comments.map((comment) => (
                     <Comment key={comment.id} comment={comment} />
                   ))}

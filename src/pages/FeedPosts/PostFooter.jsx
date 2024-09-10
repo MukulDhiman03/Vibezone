@@ -8,7 +8,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   CommentLogo,
   NotificationsLogo,
@@ -23,6 +23,8 @@ const PostFooter = ({ post, username, isProfile }) => {
   const { isCommenting, handlePostComment } = usePostComment();
   const [comment, setComment] = useState("");
   const authUser = useAuthStore((state) => state.user);
+
+  const commentRef = useRef(null);
 
   const handleLike = () => {
     if (liked) {
@@ -44,7 +46,11 @@ const PostFooter = ({ post, username, isProfile }) => {
         <Box onClick={handleLike} cursor={"pointer"} fontSize={18}>
           {!liked ? <NotificationsLogo /> : <UnlikeLogo />}
         </Box>
-        <Box cursor={"pointer"} fontSize={18}>
+        <Box
+          cursor={"pointer"}
+          fontSize={18}
+          onClick={() => commentRef.current.focus()}
+        >
           <CommentLogo />
         </Box>
       </Flex>
@@ -76,6 +82,7 @@ const PostFooter = ({ post, username, isProfile }) => {
               variant={"flushed"}
               placeholder={"Add a comment..."}
               fontSize={14}
+              ref={commentRef}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
